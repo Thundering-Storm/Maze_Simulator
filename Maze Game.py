@@ -3,19 +3,19 @@ import pygame
 from rich import print
 from sys import exit as quit
 
-SIZE = 25
+CELLSIZE = 25
 
 class player():
     def __init__(self, x: int, y: int) -> None:
         self.pos = [x, y]
-        self.moveDistance
+        self.moveDistance = CE;;SIZE
 
     def movement(self) -> None:
         pass
 
 class platform():
     def __init__(self, xMul: int, yMul: int) -> None:
-        self.size: int = SIZE
+        self.size: int = CELLSIZE
         self.pos = [xMul * self.size, yMul * self.size]
 
 def Draw():
@@ -24,7 +24,6 @@ def Draw():
 pygame.init()
 
 windowSize: tuple[int, int] = (800, 600)
-
 
 Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze game")
