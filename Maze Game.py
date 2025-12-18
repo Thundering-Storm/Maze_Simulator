@@ -1,4 +1,4 @@
-# Maze Game
+# Maze Simulator
 import pygame
 from rich import print
 from sys import exit as quit
@@ -6,36 +6,43 @@ from sys import exit as quit
 class Player():
     def __init__(self, x: int, y: int) -> None:
         self.size: int = 15
-        add = (CELLSIZE - self.size) / 2
-        self.x: float = x * CELLSIZE + SIDEBARLENGTH + add
-        self.y: float = y * CELLSIZE + add
+        center: float = (CELLSIZE - self.size) / 2
+        self.x: float = x * CELLSIZE + SIDEBARLENGTH + center
+        self.y: float = y * CELLSIZE + center
         self.moveDistance: float = CELLSIZE
         self.allowMove: bool = True
     
-    def detectkeyboard(self) -> None:
+    def Movement(self) -> None:
         "Checks wasd to move the player"
         keyboard = pygame.key.get_pressed()
         if self.allowMove:
             if keyboard[pygame.K_a]:
-                self.x -= self.moveDistance
+                self.move('horisontal', '-')
                 self.allowMove = False
             if keyboard[pygame.K_d]:
-                self.x += self.moveDistance
+                self.move('horisontal', '+')
                 self.allowMove = False
             if keyboard[pygame.K_w]:
-                self.y -= self.moveDistance
+                self.move('vertical', '+')
                 self.allowMove = False
             if keyboard[pygame.K_s]:
-                self.y += self.moveDistance
+                self.move('vertical', '-')
                 self.allowMove = False
         elif True not in keyboard:
             self.allowMove = True
 
-    def draw(self):
+    def move(self, side: str, sign: str) -> None: 
+        if side == 'horisontal':
+            exec(f'self.x {sign}= self.moveDistance')
+            # this probably isn't the best way to do this, but i dont care
+        if side == 'vertical':
+            exec(f'self.y {sign}= self.moveDistance')
+
+    def draw(self) -> None:
         pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, self.size, self.size))
 
-    def loop(self):
-        self.detectkeyboard()
+    def loop(self) -> None:
+        self.Movement()
 
 
 class Platform():
