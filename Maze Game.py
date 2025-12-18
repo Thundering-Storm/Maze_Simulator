@@ -6,31 +6,33 @@ from sys import exit as quit
 
 class Player():
     def __init__(self, x: int, y: int) -> None:
-        self.x: int = x * CELLSIZE
-        self.y: int = y * CELLSIZE
-        self.moveDistance: int = CELLSIZE
+        self.size = 15
+        self.x: float = x * CELLSIZE + SIDEBARLENGTH
+        self.y: float = y * CELLSIZE
+        self.moveDistance: float = CELLSIZE
         self.allowMove: bool = True
     
     def detectkeyboard(self) -> None:
+        "Checks wasd to move the player"
         keyboard = pygame.key.get_pressed()
         if self.allowMove:
             if keyboard[pygame.K_a]:
                 self.x -= self.moveDistance
                 self.allowMove = False
-            elif keyboard[pygame.K_d]:
+            if keyboard[pygame.K_d]:
                 self.x += self.moveDistance
                 self.allowMove = False
-            elif keyboard[pygame.K_w]:
+            if keyboard[pygame.K_w]:
                 self.y -= self.moveDistance
                 self.allowMove = False
-            elif keyboard[pygame.K_s]:
+            if keyboard[pygame.K_s]:
                 self.y += self.moveDistance
                 self.allowMove = False
         elif True not in keyboard:
             self.allowMove = True
 
     def draw(self):
-        pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, 10, 10))
+        pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, 15, 15))
 
     def loop(self):
         self.detectkeyboard()
@@ -44,7 +46,11 @@ class Platform():
 
 def Draw():
     global players
-    localPlayers = players
+    localPlayers = players # this has shown to improve performence by about 20%
+
+    Window.blit(sidebar, (0, 0))
+    Window.blit(sidebar, (windowSize[0] - SIDEBARLENGTH, 0))
+
     for player in localPlayers:
         player.draw()
 
@@ -53,12 +59,15 @@ pygame.init()
 windowSize: tuple[int, int]
 CELLSIZE: int
 players: list[Player]
+SIDEBARLENGTH: int
 
+sidebar = pygame.image.load('Assets/pictures/sidebar.png')
 windowSize = (800, 600)
-CELLSIZE = round((windowSize[1] - 100) / 20)
-players = [Player(1, 1)]
+CELLSIZE = 20
+SIDEBARLENGTH = int((windowSize[0] - (windowSize[1] - 100)) / 2)
 
-print(CELLSIZE)
+players = [Player(0, 0)]
+
 Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze Simulator")
 
@@ -67,10 +76,13 @@ while True:
         if event.type == pygame.QUIT:
             quit('Quit the game!')
             
-    Window.fill((45, 12, 43))
+    Window.fill((255, 12, 43))
 
     for player in players:
         player.loop()
+
+    for player in players:
+        print(player.x, player.y)
 
     Draw()
 
