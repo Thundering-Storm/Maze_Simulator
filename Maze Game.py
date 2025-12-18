@@ -3,12 +3,12 @@ import pygame
 from rich import print
 from sys import exit as quit
 
-
 class Player():
     def __init__(self, x: int, y: int) -> None:
-        self.size = 15
-        self.x: float = x * CELLSIZE + SIDEBARLENGTH
-        self.y: float = y * CELLSIZE
+        self.size: int = 15
+        add = (CELLSIZE - self.size) / 2
+        self.x: float = x * CELLSIZE + SIDEBARLENGTH + add
+        self.y: float = y * CELLSIZE + add
         self.moveDistance: float = CELLSIZE
         self.allowMove: bool = True
     
@@ -32,7 +32,7 @@ class Player():
             self.allowMove = True
 
     def draw(self):
-        pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, 15, 15))
+        pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, self.size, self.size))
 
     def loop(self):
         self.detectkeyboard()
