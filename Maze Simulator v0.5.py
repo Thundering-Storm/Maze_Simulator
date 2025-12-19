@@ -2,6 +2,7 @@
 import pygame
 from sys import exit as quit
 import maze
+import time
 
 class Player():
     def __init__(self, x: int, y: int) -> None:
@@ -88,14 +89,31 @@ def Draw() -> None:
 
     player.draw()
 
+    Text(f'{wincounter}', 65, 50, (255, 255, 255))
+
+def Text(string: str, x: float, y: float, color: tuple[int, int, int] = (255, 255, 255)) -> None:
+    "Draws text on the screen"
+
+    font = pygame.font.SysFont(None, 60)
+    text = font.render(string, False, color)
+    Window.blit(text, (x, y))
+
 def playerquit() -> None:
-    # will do more with this in v0.4
+    year = time.localtime().tm_year
+    yday = time.localtime().tm_yday
+    currentTime = f'date={year}, {yday}'
+    with open("Assets/highscore.txt", "a") as savefile:
+        savefile.write(f'{wincounter=}, {currentTime=}\n')
+    print(f'{wincounter=}, {currentTime=}')
+
+    
+    
     quit('Quit the game!')
 
 pygame.init()
 pygame.mixer.init()
 
-# type definitions
+# type definitions (got lazy so not all variables are here)
 windowSize: tuple[int, int]
 CELLSIZE: int
 players: list[Player]
@@ -126,7 +144,7 @@ pygame.display.set_caption("Maze Simulator")
 clock = pygame.time.Clock()
 
 while True:
-    time = clock.tick(FPS)
+    dt = clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             playerquit()

@@ -1,0 +1,3 @@
+wincounter=1, currentTime='date=2025, 353'
+wincounter=0, currentTime='date=2025, 353'
+wincounter=0, currentTime='date=2025, 353'
