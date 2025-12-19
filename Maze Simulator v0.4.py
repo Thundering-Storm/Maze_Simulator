@@ -34,40 +34,44 @@ class Player():
             self.allowMove = True
 
     def move(self, dx: int, dy: int) -> None:
+        "Moves the player"
         global currentRoom
-        new_x = self.gx + dx
-        new_y = self.gy + dy
+        newX = self.gx + dx
+        newY = self.gy + dy
 
         # bounds check
-        if new_y < 0 or new_y >= len(currentRoom):
+        if newY < 0 or newY >= len(currentRoom) + 5:
             return
-        if new_x < 0 or new_x >= len(currentRoom[0]):
+        if newX < 0 or newX >= len(currentRoom[0]):
             return
 
         # wall check
-        if currentRoom[new_x][new_y] == 1:
+        if currentRoom[newX][newY] == 1:
             return
 
-        self.gx = new_x
-        self.gy = new_y
+        self.gx = newX
+        self.gy = newY
 
-        if currentRoom[new_x][new_y] == 2:
-            currentRoom, spawn = maze.generate_maze(25, 30)
+        if currentRoom[newX][newY] == 2:
+            currentRoom, spawn = maze.generateMaze(25, 30)
 
-            players = [Player(spawn[1], spawn[0])]
+            self.gx = spawn[1]
+            self.gy = spawn[0]
 
-    def draw(self):
+    def draw(self) -> None:
+        "draws the player"
         px = SIDEBARLENGTH + self.gx * CELLSIZE + (CELLSIZE - self.size) // 2
         py = self.gy * CELLSIZE + (CELLSIZE - self.size) // 2
 
         pygame.draw.rect(Window, (255, 255, 255), (px, py, self.size, self.size))
 
     def loop(self) -> None:
+        "Game loop for the player"
         self.Movement()
 
 def Draw() -> None:
+    "Draws stuff"
     global players
-    localPlayers = players # doing this has shown to improve performence
 
     Window.blit(sidebar, (0, 0))
     Window.blit(sidebarflip, (windowSize[0] - SIDEBARLENGTH, 0))
@@ -82,20 +86,22 @@ def Draw() -> None:
             if currentRoomIndex == 3:
                 pygame.draw.rect(Window, (0, 255, 255), (roomX * 20 + 150, roomY * 20, 20, 20))
 
-    for player in localPlayers: # players
-        player.draw()
+    player.draw()
 
 def playerquit() -> None:
+    # will do more with this in v0.4
     quit('Quit the game!')
 
 pygame.init()
 
+# type definitions
 windowSize: tuple[int, int]
 CELLSIZE: int
 players: list[Player]
 SIDEBARLENGTH: int
 level: int
 
+# variables
 sidebar = pygame.image.load('Assets/pictures/sidebar.png')
 sidebarflip = pygame.transform.flip(sidebar, True, False)
 wall = pygame.image.load('Assets/pictures/wall.png')
@@ -105,9 +111,10 @@ SIDEBARLENGTH = int((windowSize[0] - (windowSize[1] - 100)) / 2)
 level = 1
 FPS = 120
 
-currentRoom, spawn = maze.generate_maze(25, 30)
+currentRoom, spawn = maze.generateMaze(25, 30)
 
-players = [Player(spawn[1], spawn[0])]
+player = Player(spawn[1], spawn[0])
+# idk why i have to do 1, 0 and not 0, 1 but ok if it works it works
 
 Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze Simulator")
@@ -121,8 +128,7 @@ while True:
             
     Window.fill((255, 12, 43))
 
-    for player in players:
-        player.loop()
+    player.loop()
 
     Draw()
 

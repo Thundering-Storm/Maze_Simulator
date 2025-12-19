@@ -1,7 +1,7 @@
 import random
 import pygame
 
-def generate_maze(height, width) -> tuple[list[list[int]], tuple[int, int]]:
+def generateMaze(height, width) -> tuple[list[list[int]], list[int]]:
     maze = [[0 for _ in range(width)] for _ in range(height)]
     mazeDetection = []
 
@@ -24,6 +24,6 @@ def generate_maze(height, width) -> tuple[list[list[int]], tuple[int, int]]:
     maze[spawnY][spawnX] = 3
     maze[winY][winX] = 2
 
-    spawn = (spawnX, spawnY)
+    spawn = [spawnX, spawnY]
 
     return maze, spawn
