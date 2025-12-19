@@ -35,7 +35,7 @@ class Player():
 
     def move(self, dx: int, dy: int) -> None:
         "Moves the player"
-        global currentRoom
+        global currentRoom, wincounter
         newX = self.gx + dx
         newY = self.gy + dy
 
@@ -49,12 +49,14 @@ class Player():
         if currentRoom[newX][newY] == 1:
             return
 
+        move.play()
         self.gx = newX
         self.gy = newY
 
         if currentRoom[newX][newY] == 2:
             currentRoom, spawn = maze.generateMaze(25, 30)
-
+            win.play()
+            wincounter += 1
             self.gx = spawn[1]
             self.gy = spawn[0]
 
@@ -82,9 +84,7 @@ def Draw() -> None:
             if currentRoomIndex == 1:
                 Window.blit(wall, (150 + roomX * 20, roomY * 20))
             elif currentRoomIndex == 2:
-                pygame.draw.rect(Window, (0, 255, 0), (roomX * 20 + 150, roomY * 20, 20, 20))
-            if currentRoomIndex == 3:
-                pygame.draw.rect(Window, (0, 255, 255), (roomX * 20 + 150, roomY * 20, 20, 20))
+                Window.blit(winblock, (150 + roomX * 20, roomY * 20))
 
     player.draw()
 
@@ -93,6 +93,7 @@ def playerquit() -> None:
     quit('Quit the game!')
 
 pygame.init()
+pygame.mixer.init()
 
 # type definitions
 windowSize: tuple[int, int]
@@ -105,11 +106,15 @@ level: int
 sidebar = pygame.image.load('Assets/pictures/sidebar.png')
 sidebarflip = pygame.transform.flip(sidebar, True, False)
 wall = pygame.image.load('Assets/pictures/wall.png')
+move = pygame.mixer.Sound('Assets/sounds/move.wav')
+win = pygame.mixer.Sound('Assets/sounds/win.wav')
+winblock = pygame.image.load('Assets/pictures/winblock.png')
 windowSize = (800, 600)
 CELLSIZE = 20
 SIDEBARLENGTH = int((windowSize[0] - (windowSize[1] - 100)) / 2)
 level = 1
 FPS = 120
+wincounter = 0
 
 currentRoom, spawn = maze.generateMaze(25, 30)
 
@@ -126,7 +131,7 @@ while True:
         if event.type == pygame.QUIT:
             playerquit()
             
-    Window.fill((255, 12, 43))
+    Window.fill((22, 14, 255))
 
     player.loop()
 
