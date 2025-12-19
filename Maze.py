@@ -1,21 +1,29 @@
 import random
+import pygame
 
-def generate_maze(height, width):
-    maze = [[0 for _ in range(height)] for _ in range(width)]
+def generate_maze(height, width) -> tuple[list[list[int]], tuple[int, int]]:
+    maze = [[0 for _ in range(width)] for _ in range(height)]
+    mazeDetection = []
 
-    for y in range(width):
-        for x in range(height):
+    for y in range(height):
+        for x in range(width):
             if random.random() < 0.3:
                 maze[y][x] = 1
 
-    spawn_x, spawn_y = random.randint(1, height-2), random.randint(1, width-2)
-    win_x, win_y = random.randint(1, height-2), random.randint(1, width-2)
+    spawnX = random.randint(1, width - 2)
+    spawnY = random.randint(1, height - 2)
+    winX = random.randint(1, width - 2)
+    winY = random.randint(1, height - 2)
 
-    while maze[spawn_y][spawn_x] == 1 or maze[win_y][win_x] == 1:
-        spawn_x, spawn_y = random.randint(1, height-2), random.randint(1, width-2)
-        win_x, win_y = random.randint(1, height-2), random.randint(1, width-2)
+    while maze[spawnY][spawnX] == 1 or maze[winY][winX] == 1:
+        spawnX = random.randint(1, width - 2)
+        spawnY = random.randint(1, height - 2)
+        winX = random.randint(1, width - 2)
+        winY = random.randint(1, height - 2)
 
-    maze[spawn_y][spawn_x] = 3
-    maze[win_y][win_x] = 2
+    maze[spawnY][spawnX] = 3
+    maze[winY][winX] = 2
 
-    return maze
+    spawn = (spawnX, spawnY)
+
+    return maze, spawn

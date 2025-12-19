@@ -7,8 +7,8 @@ class Player():
     def __init__(self, x: int, y: int) -> None:
         self.size: int = 15
         center: float = (CELLSIZE - self.size) / 2
-        self.x: float = x * CELLSIZE + SIDEBARLENGTH + center
-        self.y: float = y * CELLSIZE + center
+        self.gx: int = x
+        self.gy: int = y
         self.moveDistance: float = CELLSIZE
         self.allowMove: bool = True
     
@@ -17,29 +17,50 @@ class Player():
         keyboard = pygame.key.get_pressed()
         if self.allowMove:
             if keyboard[pygame.K_a]:
-                self.move('horisontal', '-')
+                self.move(-1, 0)
                 self.allowMove = False
             if keyboard[pygame.K_d]:
-                self.move('horisontal', '+')
+                self.move(1, 0)
                 self.allowMove = False
             if keyboard[pygame.K_w]:
-                self.move('vertical', '-')
+                self.move(0, -1)
                 self.allowMove = False
             if keyboard[pygame.K_s]:
-                self.move('vertical', '+')
+                self.move(0, 1)
                 self.allowMove = False
+            if keyboard[pygame.K_ESCAPE]:
+                playerquit()
         elif True not in keyboard:
             self.allowMove = True
 
-    def move(self, side: str, sign: str) -> None: 
-        if side == 'horisontal':
-            exec(f'self.x {sign}= self.moveDistance')
-            # this probably isn't the best way to do this, but i dont care
-        if side == 'vertical':
-            exec(f'self.y {sign}= self.moveDistance')
+    def move(self, dx: int, dy: int) -> None:
+        global currentRoom
+        new_x = self.gx + dx
+        new_y = self.gy + dy
 
-    def draw(self) -> None:
-        pygame.draw.rect(Window, (255, 255, 255), (self.x, self.y, self.size, self.size))
+        # bounds check
+        if new_y < 0 or new_y >= len(currentRoom):
+            return
+        if new_x < 0 or new_x >= len(currentRoom[0]):
+            return
+
+        # wall check
+        if currentRoom[new_x][new_y] == 1:
+            return
+
+        self.gx = new_x
+        self.gy = new_y
+
+        if currentRoom[new_x][new_y] == 2:
+            currentRoom, spawn = maze.generate_maze(25, 30)
+
+            players = [Player(spawn[1], spawn[0])]
+
+    def draw(self):
+        px = SIDEBARLENGTH + self.gx * CELLSIZE + (CELLSIZE - self.size) // 2
+        py = self.gy * CELLSIZE + (CELLSIZE - self.size) // 2
+
+        pygame.draw.rect(Window, (255, 255, 255), (px, py, self.size, self.size))
 
     def loop(self) -> None:
         self.Movement()
@@ -51,20 +72,21 @@ def Draw() -> None:
     Window.blit(sidebar, (0, 0))
     Window.blit(sidebarflip, (windowSize[0] - SIDEBARLENGTH, 0))
 
-    for player in localPlayers:
-        player.draw()
-
-    for roomY in range(0, 30):
+    for roomY in range(0, 30): # walls
         for roomX in range(0, 25):
-            currentRoomIndex: int = currentRoom[roomX][roomY]  # 2D list indexing
+            currentRoomIndex: int = currentRoom[roomX][roomY]
             if currentRoomIndex == 1:
                 Window.blit(wall, (150 + roomX * 20, roomY * 20))
             elif currentRoomIndex == 2:
                 pygame.draw.rect(Window, (0, 255, 0), (roomX * 20 + 150, roomY * 20, 20, 20))
-            elif currentRoomIndex == 3:
-                pygame.draw.rect(Window, (0, 0, 255), (roomX * 20 + 150, roomY * 20, 20, 20))  # optional: show spawn
+            if currentRoomIndex == 3:
+                pygame.draw.rect(Window, (0, 255, 255), (roomX * 20 + 150, roomY * 20, 20, 20))
 
+    for player in localPlayers: # players
+        player.draw()
 
+def playerquit() -> None:
+    quit('Quit the game!')
 
 pygame.init()
 
@@ -81,19 +103,21 @@ windowSize = (800, 600)
 CELLSIZE = 20
 SIDEBARLENGTH = int((windowSize[0] - (windowSize[1] - 100)) / 2)
 level = 1
+FPS = 120
 
-players = [Player(0, 0)]
+currentRoom, spawn = maze.generate_maze(25, 30)
 
-currentRoom = maze.generate_maze(30, 25)
+players = [Player(spawn[1], spawn[0])]
 
 Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze Simulator")
+clock = pygame.time.Clock()
 
 while True:
-
+    time = clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            quit('Quit the game!')
+            playerquit()
             
     Window.fill((255, 12, 43))
 
