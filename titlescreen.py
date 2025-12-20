@@ -41,7 +41,7 @@ def collidebutton(otherRect: pygame.Rect, mouseRect: pygame.Rect, mousePressed):
     return mouseRect.colliderect(otherRect) and mousePressed[0]
 
 def start() -> None:
-    global clickedStart, optionsOpen
+    global clickedStart, optionsOpen, diff
     while not clickedStart:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

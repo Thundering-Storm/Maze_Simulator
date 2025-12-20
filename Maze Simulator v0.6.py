@@ -56,6 +56,7 @@ class Player():
         self.gy = newY
 
         if currentRoom[newX][newY] == 2:
+            maze.setdiff(diff)
             currentRoom, spawn = maze.generateMaze(25, 30)
             win.play()
             wincounter += 1

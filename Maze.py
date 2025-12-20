@@ -2,13 +2,19 @@ import random
 import pygame
 import titlescreen
 
+currentdiff = 0.3
+
+def setdiff(diff):
+    global currentdiff
+    currentdiff = diff
+
 def generateMaze(height, width) -> tuple[list[list[int]], list[int]]:
     maze = [[0 for _ in range(width)] for _ in range(height)]
     mazeDetection = []
 
     for y in range(height):
         for x in range(width):
-            if random.random() < 0.3:
+            if random.random() < currentdiff:
                 maze[y][x] = 1
 
     spawnX = random.randint(1, width - 2)
