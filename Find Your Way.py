@@ -5,6 +5,17 @@ import maze
 import time
 import titlescreen
 
+import os
+import sys
+
+def resource_path(path):
+    try:
+        base = sys._MEIPASS # pyright: ignore
+    except AttributeError:
+        base = os.path.abspath(".")
+    return os.path.join(base, path)
+
+
 class Player():
     def __init__(self, x: int, y: int) -> None:
         self.size: int = 15
@@ -123,12 +134,24 @@ SIDEBARLENGTH: int
 level: int
 
 # variables
-sidebar = pygame.image.load('Assets/pictures/sidebar.png')
+sidebar = pygame.image.load(
+    resource_path("Assets/pictures/sidebar.png")
+)
+wall = pygame.image.load(
+    resource_path("Assets/pictures/wall.png")
+)
+move = pygame.mixer.Sound(
+    resource_path("Assets/sounds/move.wav")
+)
+win = pygame.mixer.Sound(
+    resource_path("Assets/sounds/win.wav")
+)
+winblock = pygame.image.load(
+    resource_path("Assets/pictures/winblock.png")
+)
+
+
 sidebarflip = pygame.transform.flip(sidebar, True, False)
-wall = pygame.image.load('Assets/pictures/wall.png')
-move = pygame.mixer.Sound('Assets/sounds/move.wav')
-win = pygame.mixer.Sound('Assets/sounds/win.wav')
-winblock = pygame.image.load('Assets/pictures/winblock.png')
 windowSize = (800, 600)
 CELLSIZE = 20
 SIDEBARLENGTH = int((windowSize[0] - (windowSize[1] - 100)) / 2)
