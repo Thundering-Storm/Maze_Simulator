@@ -9,6 +9,7 @@ def setdiff(diff):
     currentdiff = diff
 
 def generateMaze(height, width) -> tuple[list[list[int]], list[int]]:
+    'Generates a maze'
     maze = [[0 for _ in range(width)] for _ in range(height)]
     mazeDetection = []
 

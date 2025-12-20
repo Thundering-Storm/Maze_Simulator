@@ -103,10 +103,10 @@ def Text(string: str, x: float, y: float, color: tuple[int, int, int] = (255, 25
 def playerquit() -> None:
     year = time.localtime().tm_year
     yday = time.localtime().tm_yday
-    currentTime = f'date={year}, {yday}'
+    currentTime = f'{year}, {yday}'
     with open("Assets/highscore.txt", "a") as savefile:
-        savefile.write(f'{wincounter=}, {currentTime=}\n')
-    print(f'{wincounter=}, {currentTime=}')
+        savefile.write(f'{wincounter=}, {currentTime=}, {diff}\n')
+    print(f'{wincounter=}, {currentTime=}, {diff=}')
     Text(f'You got {wincounter} points, Nice!', 175, 100, (255, 255, 255))
     pygame.display.update()
     pygame.time.wait(1000)

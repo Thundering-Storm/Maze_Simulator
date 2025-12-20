@@ -54,21 +54,19 @@ def start() -> None:
 
         if not optionsOpen:
             pygame.draw.rect(Window, (0, 255, 0), startbutton)
-            pygame.draw.rect(Window, (125, 255, 0), leaderboardbutton)
-            pygame.draw.rect(Window, (255, 125, 125), optionsbutton)
+            pygame.draw.rect(Window, (100, 100, 100), optionsbutton)
             Text(f'Play', windowSize[0] // 2 - 50, windowSize[1] / 2 - 25, (255, 255, 255))
-            Text('options', 50, 50, (255, 255, 255))
-            Text('leaderboard wip', 450, 50, (255, 255 ,255))
+            Text('options', 75, 75, (255, 255, 255))
         
         if optionsOpen:
             pygame.draw.rect(Window, (0, 255, 0), ezdiff)
             pygame.draw.rect(Window, (225, 125, 0), normaldiff)
             pygame.draw.rect(Window, (255, 0, 0), harddiff)
-            pygame.draw.rect(Window, (255, 255, 255), leaveopt)
+            pygame.draw.rect(Window, (100, 100, 100), leaveopt)
             Text('eazy', 50, 300, (255, 255, 255))
             Text('nrml', 350, 300, (255, 255, 255))
             Text('hard', 650, 300, (255, 255, 255))
-            Text('backToMenu', 50, 525, (0, 0, 0))
+            Text('backToMenu', 50, 525, (255, 255, 255))
 
         if collidebutton(startbutton, mouseRect, mousePressed) and not optionsOpen:
             clickedStart = True
