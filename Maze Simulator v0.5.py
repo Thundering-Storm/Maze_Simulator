@@ -3,6 +3,7 @@ import pygame
 from sys import exit as quit
 import maze
 import time
+import titlescreen
 
 class Player():
     def __init__(self, x: int, y: int) -> None:
@@ -105,10 +106,10 @@ def playerquit() -> None:
     with open("Assets/highscore.txt", "a") as savefile:
         savefile.write(f'{wincounter=}, {currentTime=}\n')
     print(f'{wincounter=}, {currentTime=}')
-
-    
-    
-    quit('Quit the game!')
+    Text(f'You got {wincounter} points, Nice!', 175, 100, (255, 255, 255))
+    pygame.display.update()
+    pygame.time.wait(1000)
+    quit('Player esc')
 
 pygame.init()
 pygame.mixer.init()
@@ -143,11 +144,13 @@ Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze Simulator")
 clock = pygame.time.Clock()
 
+titlescreen.start()
+
 while True:
     dt = clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            playerquit()
+            quit('Quit the game!')
             
     Window.fill((22, 14, 255))
 
