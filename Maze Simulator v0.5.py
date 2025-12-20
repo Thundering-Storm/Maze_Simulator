@@ -135,6 +135,10 @@ level = 1
 FPS = 120
 wincounter = 0
 
+titlescreen.start()
+diff = titlescreen.getdiff()
+
+maze.setdiff(diff)
 currentRoom, spawn = maze.generateMaze(25, 30)
 
 player = Player(spawn[1], spawn[0])
@@ -143,8 +147,6 @@ player = Player(spawn[1], spawn[0])
 Window = pygame.display.set_mode(windowSize)
 pygame.display.set_caption("Maze Simulator")
 clock = pygame.time.Clock()
-
-titlescreen.start()
 
 while True:
     dt = clock.tick(FPS)

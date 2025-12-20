@@ -1,5 +1,6 @@
 import random
 import pygame
+import titlescreen
 
 def generateMaze(height, width) -> tuple[list[list[int]], list[int]]:
     maze = [[0 for _ in range(width)] for _ in range(height)]
